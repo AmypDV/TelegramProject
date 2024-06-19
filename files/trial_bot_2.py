@@ -80,7 +80,7 @@ async def send_echo(message: Message):
     elif message.content_type == ContentType.STICKER:
         await message.answer_sticker(message.sticker.file_id)
     else:
-        text = 'Я пока глуп и отвечаю только на текстовые сообщения'
+        text = 'Я пока глуп и отвечаю только на текстовые сообщения и стикеры :))'
         await message.answer(text=text)
 
 if __name__ == '__main__':
