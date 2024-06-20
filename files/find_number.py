@@ -14,33 +14,41 @@ N_TRAIN = 8
 bot = Bot(BOT_TOKEN)
 dispetcher = Dispatcher()
 
+
 def random_number():
     return random.randint(0, 100)
+
+
 @dataclass(slots=True)
 class StatsGames:
-    in_game:bool = False
+    in_game: bool = False
     number: int = None
-    n_train : int = None
-    n_game:int = 0
-    n_win:int = 0
+    n_train: int = None
+    n_game: int = 0
+    n_win: int = 0
+
 
 GAME: dict[int, StatsGames] = {}
 
+
 @dispetcher.message(CommandStart())
-async def get_start_command(message:Message):
+async def get_start_command(message: Message):
     await message.answer('Привет. Я бот и умею играть в игру "Угадай число.\n'
                          'Для ознакомления с правилами введи команду /help.\n'
                          'Можно посмотреть статистику ваших игр по команде /stat\n'
                          'Начнём играть?')
 
+
 @dispetcher.message(Command(commands='help'))
-async def get_help_command(message:Message):
-    await message.answer(f'Игра "Угадайте число"\nЯ загадываю число от 0 до {MAX_NUMBER}\nВаща задача это число угадать\n'
+async def get_help_command(message: Message):
+    await message.answer(f'Игра "Угадайте число"\nЯ загадываю число от 0 до {MAX_NUMBER}\n'
+                         f'Ваща задача это число угадать\n'
                          f'У вас будет {N_TRAIN} попыток\n Команда досрочного завершения /end\n'
                          f'Начнем играть?')
 
+
 @dispetcher.message(F.text.lower().in_(['да', 'играем']))
-async def start_game(message:Message):
+async def start_game(message: Message):
     user_id = message.from_user.id
 #    GAME.setdefault(id, StatsGames())
     if GAME.get(user_id) and GAME.get(user_id).in_game:
@@ -53,18 +61,20 @@ async def start_game(message:Message):
         GAME.setdefault(user_id).n_game += 1
         await message.answer(f'Введите число от 0 до {MAX_NUMBER}')
 
+
 @dispetcher.message(F.text.lower().in_(['нет', 'не буду']))
-async def start_game(message:Message):
+async def start_game(message: Message):
     user_id = message.from_user.id
     if GAME.setdefault(user_id).in_game:
         await message.answer(f'Мы уже играем! Введите число от 0 до {MAX_NUMBER}')
     else:
         await message.answer('Но я больше ничего не умею... Давай сыграем...')
 
+
 @dispetcher.message(lambda text: text.text and text.text.isdigit() and 0 <= int(text.text) <= 100)
-async def get_number_from_man(message:Message):
+async def get_number_from_man(message: Message):
     user_id = message.from_user.id
-    if GAME.setdefault(user_id, StatsGames()).in_game == False:
+    if not GAME.setdefault(user_id, StatsGames()).in_game:
         await message.answer('Игра еще не началась!. Будем играть?')
     else:
         if int(message.text) == GAME.setdefault(user_id).number:
@@ -86,30 +96,30 @@ async def get_number_from_man(message:Message):
 
 
 @dispetcher.message(Command(commands='stat'))
-async def get_statistic(message:Message):
+async def get_statistic(message: Message):
     user_id = message.from_user.id
     if GAME.get(user_id):
-        await message.answer(f'Вы играли {GAME.setdefault(user_id).n_game} раз.\nИз них вы выиграли {GAME.setdefault(user_id).n_win} раз.)
+        await message.answer(f'Вы играли {GAME.setdefault(user_id).n_game} раз.\n'
+                             f'Из них вы выиграли {GAME.setdefault(user_id).n_win} раз.')
     else:
         await message.answer('Вы ни разу не играли. Сыграем?')
 
+
 @dispetcher.message(Command(commands='end'))
-async def get_statistic(message:Message):
+async def end_game(message: Message):
     user_id = message.from_user.id
-    GAME.setdefault(user_id).in_game =False
-    await message.answer(f':Жаль, что досрочно завершаем игру.... Может быть еще сыграем?')
+    GAME.setdefault(user_id).in_game = False
+    await message.answer(f'Жаль, что досрочно завершаем игру.... Может быть еще сыграем?')
+
 
 @dispetcher.message()
-async def get_any_message(message:Message):
+async def get_any_message(message: Message):
     user_id = message.from_user.id
     if GAME.setdefault(user_id) and GAME.setdefault(user_id).in_game:
         await message.answer(f'Нужно ввести число от 0 до {MAX_NUMBER}')
     else:
         await message.answer('Я Вас не понимаю. Я умею только играть в игру "Угадай число". Сыграем?')
 
+
 if __name__ == '__main__':
     dispetcher.run_polling(bot)
-
-
-
-
