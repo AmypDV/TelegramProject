@@ -1,10 +1,13 @@
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command, Filter
 from aiogram.types import Message, ContentType
-from aiogram import  F
+
 import os
+import sys
 import requests
-import pprint
+
+import logging
+
 
 # Вместо BOT TOKEN HERE нужно вставить токен вашего бота, полученный у @BotFather
 BOT_TOKEN = os.getenv("Amyp_First_Bot_key", "00000000")
@@ -15,6 +18,16 @@ URL = {'кот':'https://api.thecatapi.com/v1/images/search',
 # Создаем объекты бота и диспетчера
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
+
+format = '[{asctime}] #{levelname:8} {filename}:'\
+           '{lineno} - {name} - {message}'
+formatter = logging.Formatter(format, style='{')
+logger = logging.getLogger(__name__)
+logger.setLevel(10)
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setFormatter(formatter)
+logger.addHandler(stdout_handler)
+
 
 def parser_cat() -> str:
     url = URL['кот']
