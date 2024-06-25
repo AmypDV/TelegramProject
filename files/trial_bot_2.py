@@ -64,7 +64,6 @@ class MyFilterWords(Filter):
 
 @dp.message(MyFilterWords('кот', 'собака', 'лиса'))
 async def send_generate_foto(message:Message):
-    url = URL[message.text]
     match message.text:
         case 'кот': foto = parser_cat()
         case 'собака': foto = parser_dog()
