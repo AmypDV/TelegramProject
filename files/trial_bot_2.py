@@ -34,6 +34,7 @@ def parser_cat() -> str:
     foto = requests.get(url)
     if foto.status_code == 200:
         foto = foto.json()[0]["url"]
+        logger.info('parcer cat')
         return foto
 
 def parser_dog() -> str:
@@ -41,6 +42,7 @@ def parser_dog() -> str:
     foto = requests.get(url)
     if foto.status_code == 200:
         foto = foto.json()["url"]
+        logger.info('parcer dog')
         return foto
 
 def parser_fox() -> str:
@@ -48,17 +50,20 @@ def parser_fox() -> str:
     foto = requests.get(url)
     if foto.status_code == 200:
         foto = foto.json()["image"]
+        logger.info('parcer fox')
         return foto
 
 # Этот хэндлер будет срабатывать на команду "/start"
 @dp.message(Command(commands=["start"]))
 async def process_start_command(message: Message):
+    logger.info(f'command start. Member {message.from_user.id}')
     await message.answer('Привет!\nМеня зовут Бот!\nНапиши мне что-нибудь')
 
 
 # Этот хэндлер будет срабатывать на команду "/help"
 @dp.message(Command(commands=['help']))
 async def process_help_command(message: Message):
+    logger.info(f'command help. Member {message.from_user.id}')
     await message.answer(
         ''' Напиши мне что-нибудь и в ответ
 я пришлю тебе твое сообщение.
@@ -81,6 +86,7 @@ async def send_generate_foto(message:Message):
         case 'кот': foto = parser_cat()
         case 'собака': foto = parser_dog()
         case 'лиса': foto = parser_fox()
+    logger.info(f'answer photo. Member {message.from_user.id}')
     await message.answer_photo(photo=foto)
 
 # Этот хэндлер будет срабатывать на любые ваши текстовые сообщения,
