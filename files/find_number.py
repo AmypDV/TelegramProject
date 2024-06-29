@@ -35,10 +35,10 @@ GAME: dict[int, StatsGames] = {}
 async def get_start_command(message: Message):
     user_id = message.from_user.id
     GAME.setdefault(user_id, StatsGames())
-    await message.answer('Привет. Я бот и умею играть в игру "Угадай число.\n'
+    await message.answer('\U0001F1F7\U0001F1FA Привет. Я бот и умею играть в игру "Угадай число.\n'
                          'Для ознакомления с правилами введи команду /help.\n'
                          'Можно посмотреть статистику ваших игр по команде /stat\n'
-                         'Начнём играть?')
+                         'Начнём играть? \U0001F600')
 
 
 @dispetcher.message(Command(commands='help'))
@@ -49,7 +49,7 @@ async def get_help_command(message: Message):
                          f'Начнем играть?')
 
 
-@dispetcher.message(F.text.lower().in_(['да', 'играем']))
+@dispetcher.message(F.text.lower().in_({'да', 'играем'}))
 async def start_game(message: Message):
     user_id = message.from_user.id
     if not GAME.get(user_id):
@@ -93,7 +93,8 @@ async def get_number_from_man(message: Message):
             await message.answer('Заданное число меньше. Попробуйте еще раз')
         if GAME.setdefault(user_id).n_train == 0:
             GAME.setdefault(user_id).in_game = False
-            await message.answer(f'Увы, но вы проиграли... Заданное число {GAME.setdefault(user_id).number}.\n'
+            await message.answer(f'Увы, но вы проиграли... \U0001F610 \n'
+                                 f' Заданное число {GAME.setdefault(user_id).number}.\n'
                                  f' Еще раз сыграем?')
 
 
