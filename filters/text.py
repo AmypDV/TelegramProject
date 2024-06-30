@@ -9,4 +9,4 @@ class MyFilterWords(Filter):
         self.words = args
 
     async def __call__(self, message: Message) -> bool:
-        return message.text in self.words
+        return message.text.lower() in self.words
