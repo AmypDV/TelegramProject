@@ -1,5 +1,6 @@
 from aiogram.enums import ContentType
 from aiogram.types import Message
+from aiogram import Router
 
 import logging
 
@@ -11,8 +12,9 @@ from lexicon.lexicon import LEXICON_RU
 
 logger = logging.getLogger(__name__)
 
+router_user = Router()
 
-@dp.message(MyFilterWords('кот', 'собака', 'лиса'))
+@router_user.message(MyFilterWords('кот', 'собака', 'лиса'))
 async def send_generate_foto(message:Message):
     match message.text:
         case 'кот': foto = get_url_of_cat()
@@ -21,7 +23,7 @@ async def send_generate_foto(message:Message):
     logger.info(f'answer photo. Member {message.from_user.id}')
     await message.answer_photo(photo=foto)
 
-@dp.message()
+@router_user.message()
 async def send_echo(message: Message):
     if message.content_type == ContentType.TEXT:
         await message.reply(text=message.text)
@@ -31,4 +33,4 @@ async def send_echo(message: Message):
         await message.answer_sticker(message.sticker.file_id)
     else:
         logger.info(f'answer stupid. Member {message.from_user.id}')
-        await message.answer(text=LEXICON_RU.stupid)
+        await message.answer(text=LEXICON_RU().stupid)
