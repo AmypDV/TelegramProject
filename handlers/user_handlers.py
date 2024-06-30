@@ -16,7 +16,7 @@ router_user = Router()
 
 @router_user.message(MyFilterWords('кот', 'собака', 'лиса'))
 async def send_generate_foto(message:Message):
-    match message.text:
+    match message.text.lower():
         case 'кот': foto = get_url_of_cat()
         case 'собака': foto = get_url_of_dog()
         case 'лиса': foto = get_url_of_fox()
