@@ -2,6 +2,8 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
+from handlers.user_handlers import router_user
+from handlers.command_handlers import router_command
 
 
 
@@ -14,6 +16,9 @@ async def main() -> None:
     # Инициализируем бот и диспетчер
     bot = Bot(token=config.tg_bot.token)
     dp = Dispatcher()
+
+    # Регистрируем роутеры в диспетчере
+    dp.include_routers(router_command, router_user)
 
     # Пропускаем накопившиеся апдейты и запускаем polling
     await bot.delete_webhook(drop_pending_updates=True)
