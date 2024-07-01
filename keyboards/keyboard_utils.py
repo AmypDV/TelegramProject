@@ -1,4 +1,5 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
 # Создаем объекты кнопок
@@ -7,8 +8,10 @@ button_dog = KeyboardButton(text='Собака')
 button_fox = KeyboardButton(text='Лиса')
 
 
-# Создаем объект клавиатуры, добавляя в него кнопки
-keyboard_animal = ReplyKeyboardMarkup(keyboard=[[button_cat, button_dog, button_fox]],
-                                      resize_keyboard=True,
-                                      one_time_keyboard=True
-                                     )
+# Инициализируем объект билдера
+kb_builder_animal = ReplyKeyboardBuilder()
+kb_builder_animal.row(button_cat, button_dog, button_fox, width=3)
+keyboard_animal = kb_builder_animal.as_markup(
+                                              resize_keyboard=True,
+                                              one_time_keyboard=True
+                                              )
