@@ -5,7 +5,14 @@ from config_data.config import Config, load_config
 from handlers.user_handlers import router_user
 from handlers.command_handlers import router_command
 
+import logging
+import sys
 
+
+logging.basicConfig(level=logging.INFO,
+                    format='#%(levelname)-8s [%(asctime)s] - %(filename)s:%(lineno)d - %(message)s',
+                    handlers=[logging.StreamHandler(sys.stdout)]
+                    )
 
 # Функция конфигурирования и запуска бота
 async def main() -> None:

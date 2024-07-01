@@ -9,9 +9,10 @@ from filters.text import MyFilterWords
 from lexicon.lexicon import LEXICON_RU
 
 
-
+# Создаем логгер
 logger = logging.getLogger(__name__)
 
+# Создаем роутер
 router_user = Router()
 
 @router_user.message(MyFilterWords('кот', 'собака', 'лиса'))
@@ -20,7 +21,7 @@ async def send_generate_foto(message:Message):
         case 'кот': foto = get_url_of_cat()
         case 'собака': foto = get_url_of_dog()
         case 'лиса': foto = get_url_of_fox()
-    logger.info(f'answer photo. Member {message.from_user.id}')
+    logger.debug(f'answer photo. Member {message.from_user.id}')
     await message.answer_photo(photo=foto)
 
 @router_user.message()
